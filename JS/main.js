@@ -66,7 +66,8 @@ const COLORS = {
   }
 
   function getWinner(colIdx, rowIdx) {
-    return checkVertical(colIdx, rowIdx) || checkHorizontal(colIdx, rowIdx)
+    return checkVertical(colIdx, rowIdx) || checkHorizontal(colIdx, rowIdx) ||
+    checkBackSlash(colIdx, rowIdx) || checkForwardSlash(colIdx, rowIdx);
   }
 
   function checkVertical(colIdx, rowIdx) {
@@ -77,6 +78,18 @@ const COLORS = {
   function checkHorizontal(colIdx, rowIdx) {
     const numLeft = countAdjacent(colIdx, rowIdx, -1, 0);
     const numRight = countAdjacent(colIdx, rowIdx, 1, 0);
+    return numLeft + numRight >= 3 ? turn : null;
+  }
+
+  function checkBackSlash(colIdx, rowIdx) {
+    const numLeft = countAdjacent(colIdx, rowIdx, -1, 1);
+    const numRight = countAdjacent(colIdx, rowIdx, 1, -1);
+    return numLeft + numRight >= 3 ? turn : null;
+  }
+
+  function checkForwardSlash(colIdx, rowIdx) {
+    const numLeft = countAdjacent(colIdx, rowIdx, -1, -1);
+    const numRight = countAdjacent(colIdx, rowIdx, 1, 1);
     return numLeft + numRight >= 3 ? turn : null;
   }
 
