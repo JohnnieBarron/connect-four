@@ -15,7 +15,7 @@ const COLORS = {
   /*----- cached elements  -----*/
   const msgEl = document.querySelector('h1');
   const playAgainBtn = document.getElementById('play-again');
-  const markersELs = [...document.querySelectorAll('#markers > div')]; // convert the node list into an array
+  const markerEls = [...document.querySelectorAll('#markers > div')];  // Convert the NodeList into an Array
   
   /*----- event listeners -----*/
   document.getElementById('markers').addEventListener('click', handleDrop);
@@ -44,12 +44,12 @@ const COLORS = {
     render();
   }
   
-  // In Response to user interaction, update all impacted states then call render
+  // In response to user interaction, update all impacted
+  // state, then call render()
   function handleDrop(evt) {
-
     // 1) Determine the index of the clicked column marker.
-    const colIdx = markersELs.indexOf(evt.target);
-    // 2) If not a valid index, do nothing (return from function).
+    const colIdx = markerEls.indexOf(evt.target);
+    // 2) If not a valid index, do nothing(return from function).
     if (colIdx === -1) return;
     // 3) Create a shortcut variable to the clicked column array, e.g., `colArr`.
     const colArr = board[colIdx];
@@ -57,60 +57,66 @@ const COLORS = {
     const rowIdx = colArr.indexOf(null);
     // 5) Update the "cell" in `colArr` with whose turn it is.
     colArr[rowIdx] = turn;
-    // 6) Compute and update the state of the game (winner?).
+    // 6) Compute and update the state of the game (winner ?).
     winner = getWinner(colIdx, rowIdx);
     // 7) Update whose turn it is.
-    turn *= -1; 
+    turn *= -1;
     // 8) All state has been updated - call render()!
-        render();
+    render();
   }
-
+  
   function getWinner(colIdx, rowIdx) {
     return checkVertical(colIdx, rowIdx) || checkHorizontal(colIdx, rowIdx) ||
-    checkBackSlash(colIdx, rowIdx) || checkForwardSlash(colIdx, rowIdx);
+      checkBackslash(colIdx, rowIdx) || checkForwardslash(colIdx, rowIdx) ||
+      checkTie();
   }
-
-  function checkVertical(colIdx, rowIdx) {
-    const numbelow = countAdjacent(colIdx, rowIdx, 0, -1);
-    return numbelow === 3 ? turn : null;
+  
+  function checkTie() {
+    for (let colArr of board) {
+      if (colArr.includes(null)) return null;
+    }
+    return 'Tie';
   }
-
+  
+  function checkForwardslash(colIdx, rowIdx) {
+    const numLeft = countAdjacent(colIdx, rowIdx, -1, -1);
+    const numRight = countAdjacent(colIdx, rowIdx, 1, 1);
+    return numLeft + numRight >= 3 ? turn : null;
+  }
+  
+  function checkBackslash(colIdx, rowIdx) {
+    const numLeft = countAdjacent(colIdx, rowIdx, -1, 1);
+    const numRight = countAdjacent(colIdx, rowIdx, 1, -1);
+    return numLeft + numRight >= 3 ? turn : null;
+  }
+  
   function checkHorizontal(colIdx, rowIdx) {
     const numLeft = countAdjacent(colIdx, rowIdx, -1, 0);
     const numRight = countAdjacent(colIdx, rowIdx, 1, 0);
     return numLeft + numRight >= 3 ? turn : null;
   }
-
-  function checkBackSlash(colIdx, rowIdx) {
-    const numLeft = countAdjacent(colIdx, rowIdx, -1, 1);
-    const numRight = countAdjacent(colIdx, rowIdx, 1, -1);
-    return numLeft + numRight >= 3 ? turn : null;
+  
+  function checkVertical(colIdx, rowIdx) {
+    const numBelow = countAdjacent(colIdx, rowIdx, 0, -1);
+    return numBelow === 3 ? turn : null;
   }
-
-  function checkForwardSlash(colIdx, rowIdx) {
-    const numLeft = countAdjacent(colIdx, rowIdx, -1, -1);
-    const numRight = countAdjacent(colIdx, rowIdx, 1, 1);
-    return numLeft + numRight >= 3 ? turn : null;
-  }
-
   
   // col/rowDelta represents the value that col/rowIdx
-  // will change after iteration
-
+  // will change by after each iteration
   function countAdjacent(colIdx, rowIdx, colDelta, rowDelta) {
     let count = 0;
     colIdx += colDelta;
     rowIdx += rowDelta;
-    // use a while loop when you dont know
-    // how many times you need to iterate/loop
+    // Use a while loop when you don't know
+    // how many times you need to loop/iterate
     while (board[colIdx] && board[colIdx][rowIdx] === turn) {
-        count++;
-        colIdx += colDelta;
-        rowIdx += rowDelta;
+      count++;
+      colIdx += colDelta;
+      rowIdx += rowDelta;
     }
     return count;
   }
-
+  
   // The purpose of the render() function is to 
   // "transfer"/visualize ALL state to/in the DOM
   function render() {
@@ -124,9 +130,9 @@ const COLORS = {
     // <conditional exp> ? <truthy exp> : <falsy exp>
     playAgainBtn.style.visibility = winner ? 'visible' : 'hidden';
     // TODO: conditionally render the markers
-    markersELs.forEach((markerEl, colIdx) => {
-        const  showMarker = board[colIdx].includes(null) && !winner;
-        markerEl.style.visibility = showMarker ? 'visible' : 'hidden';
+    markerEls.forEach((markerEl, colIdx) => {
+      const showMarker = board[colIdx].includes(null) && !winner;
+      markerEl.style.visibility = showMarker ? 'visible' : 'hidden';
     });
   }
   
