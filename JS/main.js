@@ -15,9 +15,10 @@ const COLORS = {
   /*----- cached elements  -----*/
   const msgEl = document.querySelector('h1');
   const playAgainBtn = document.getElementById('play-again');
+  const markersELs = [...document.querySelectorAll('#markers > div')]; // convert the node list into an array
   
   /*----- event listeners -----*/
-  
+  document.getElementById('markers').addEventListener('click', handleDrop);
   
   /*----- functions -----*/
   init();
@@ -42,6 +43,26 @@ const COLORS = {
     render();
   }
   
+  // In Response to user interaction, update all impacted states then call render
+  function handleDrop(evt) {
+
+    // 1) Determine the index of the clicked column marker.
+    const colIdx = markersELs.indexOf(evt.target);
+    // 2) If not a valid index, do nothing (return from function).
+    if (colIdx === -1) return;
+    // 3) Create a shortcut variable to the clicked column array, e.g., `colArr`.
+    const colArr = board[colIdx];
+    // 4) Determine the index of the first available "cell" (first `null` element in `colArr`).
+    const rowIdx = colArr.indexOf(null);
+    // 5) Update the "cell" in `colArr` with whose turn it is.
+    colArr[rowIdx] = turn;
+    // 6) Compute and update the state of the game (winner?).
+    // 7) Update whose turn it is.
+    turn *= turn 
+    // 8) All state has been updated - call render()!
+        render();
+  }
+
   // The purpose of the render() function is to 
   // "transfer"/visualize ALL state to/in the DOM
   function render() {
