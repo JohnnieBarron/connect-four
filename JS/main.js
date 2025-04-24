@@ -75,9 +75,12 @@ const COLORS = {
   }
 
   function checkHorizontal(colIdx, rowIdx) {
-    const numbelow = countAdjacent(colIdx, rowIdx, 0, -1);
-    return numbelow === 3 ? turn : null;
+    const numLeft = countAdjacent(colIdx, rowIdx, -1, 0);
+    const numRight = countAdjacent(colIdx, rowIdx, 1, 0);
+    return numLeft + numRight >= 3 ? turn : null;
   }
+
+  
   // col/rowDelta represents the value that col/rowIdx
   // will change after iteration
 
@@ -87,7 +90,7 @@ const COLORS = {
     rowIdx += rowDelta;
     // use a while loop when you dont know
     // how many times you need to iterate/loop
-    while (board[colIdx][rowIdx] === turn) {
+    while (board[colIdx] && board[colIdx][rowIdx] === turn) {
         count++;
         colIdx += colDelta;
         rowIdx += rowDelta;
