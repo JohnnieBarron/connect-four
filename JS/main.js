@@ -124,6 +124,10 @@ const COLORS = {
     // <conditional exp> ? <truthy exp> : <falsy exp>
     playAgainBtn.style.visibility = winner ? 'visible' : 'hidden';
     // TODO: conditionally render the markers
+    markersELs.forEach((markerEl, colIdx) => {
+        const  showMarker = board[colIdx].includes(null) && !winner;
+        markerEl.style.visibility = showMarker ? 'visible' : 'hidden';
+    });
   }
   
   function renderMessage() {
