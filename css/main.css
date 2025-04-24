@@ -31,7 +31,7 @@
     margin-top: 1.5vmin;
   }
   
-  #markers > div {
+  #markers>div {
     height: 10vmin;
     border-width: 5vmin;
     border-style: solid;
@@ -39,10 +39,11 @@
     transform: scale(0.7);
   }
   
-  #markers > div:hover {
+  #markers>div:hover {
     transform: scale(0.9);
-    transition: transform 150ms ease-in;
+    transition: all 150ms ease-in;
     border-top-color: darkgrey;
+    cursor: pointer;
   }
   
   #board {
@@ -53,7 +54,7 @@
     margin-top: -4vmin;
   }
   
-  #board > div {
+  #board>div {
     border-radius: 50%;
     border: 0.1vmin solid grey;
   }
@@ -70,4 +71,5 @@
   button:hover {
     color: white;
     background-color: darkgrey;
+    cursor: pointer;
   }
